@@ -14,12 +14,11 @@ namespace NetSuite;
 
 use NetSuite\Classes\ApplicationInfo;
 use NetSuite\Classes\GetDataCenterUrlsRequest;
-use NetSuite\Classes\Passport;
 use NetSuite\Classes\Preferences;
-use NetSuite\Classes\RecordRef;
 use NetSuite\Classes\SearchPreferences;
 use NetSuite\Classes\TokenPassport;
 use NetSuite\Classes\TokenPassportSignature;
+use Psr\Log\LoggerInterface;
 use SoapClient;
 use SoapHeader;
 
@@ -42,29 +41,33 @@ class NetSuiteClient
      */
     private $soapHeaders = [];
     /**
-     * @var \NetSuite\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
-     * @param array $config
+     * @param array|null $config
      * @param array $options
-     * @param SoapClient $client
+     * @param SoapClient|null $client
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
-    public function __construct($config = null, $options = [], $client = null)
-    {
-        if ($config) {
-            $this->config = $config;
-        } else {
-            $this->config = self::getEnvConfig();
-        }
+    public function __construct(
+        ?array $config = null,
+        array $options = [],
+        ?SoapClient $client = null,
+        ?LoggerInterface $logger = null
+    ) {
+        $this->config = $config ?? self::getEnvConfig();
+
         $this->validateConfig($this->config);
         $this->clientOptions = $options;
+
         if (isset($client)) {
-          $this->client = $client;
+            $this->client = $client;
         }
-        $this->logger = new Logger(
-            !empty($this->config['log_path']) ? $this->config['log_path'] : NULL,
+
+        $this->logger = $logger ?? new Logger(
+            !empty($this->config['log_path']) ? $this->config['log_path'] : null,
             !empty($this->config['log_format']) ? $this->config['log_format'] : Logger::DEFAULT_LOG_FORMAT,
             !empty($this->config['log_dateformat']) ? $this->config['log_dateformat'] : Logger::DEFAULT_DATE_FORMAT
         );
@@ -141,6 +144,10 @@ class NetSuiteClient
             'endpoint',
             'host',
             'account',
+            'token',
+            'tokenSecret',
+            'consumerKey',
+            'consumerSecret',
         ];
         foreach ($requiredParams as $key) {
             if (!isset($config[$key]) || empty($config[$key])) {
@@ -184,13 +191,7 @@ class NetSuiteClient
     protected function makeSoapCall($operation, $parameter)
     {
         $this->fixWtfCookieBug();
-
-        if (isset($this->config['token'])) {
-            $this->addHeader('tokenPassport', $this->createTokenPassportFromConfig($this->config));
-        } else {
-            $this->setApplicationInfo($this->config['app_id']);
-            $this->addHeader("passport", $this->createPassportFromConfig($this->config));
-        }
+        $this->addHeader('tokenPassport', $this->createTokenPassportFromConfig($this->config));
 
         try {
             $response = $this->getClient()->__soapCall($operation, [$parameter], null, $this->soapHeaders);
@@ -232,24 +233,6 @@ class NetSuiteClient
     private function createWsdl($config)
     {
         return $config['host'].'/wsdl/v'.$config['endpoint'].'_0/netsuite.wsdl';
-    }
-
-    /**
-     * Create the Passport.
-     *
-     * @param array $config
-     * @return Passport
-     */
-    private function createPassportFromConfig($config)
-    {
-        $passport = new Passport();
-        $passport->account = $config['account'];
-        $passport->email = $config['email'];
-        $passport->password = $config['password'];
-        $passport->role = new RecordRef();
-        $passport->role->internalId = $config['role'];
-
-        return $passport;
     }
 
     /**
@@ -423,7 +406,10 @@ class NetSuiteClient
     public function setLogPath($logPath)
     {
         $this->config['log_path'] = $logPath;
-        $this->logger->setPath($logPath);
+
+        if ($this->logger instanceof Logger) {
+            $this->logger->setPath($logPath);
+        }
     }
 
     /**
@@ -434,7 +420,15 @@ class NetSuiteClient
     private function logSoapCall($operation)
     {
         if (isset($this->config['logging']) && $this->config['logging']) {
-            $this->logger->logSoapCall($this->getClient(), $operation);
+            $this->logger->info(
+                Logger::getSoapCallRequestMessage($this->getClient()),
+                ['operation' => $operation, 'type' => Logger::TYPE_REQUEST]
+            );
+
+            $this->logger->info(
+                Logger::getSoapCallResponseMessage($this->getClient()),
+                ['operation' => $operation, 'type' => Logger::TYPE_RESPONSE]
+            );
         }
     }
 
