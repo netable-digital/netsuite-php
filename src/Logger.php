@@ -81,7 +81,7 @@ class Logger implements LoggerInterface
         return str_replace('xsitype', 'xsi:type', $xml->asXML());
     }
 
-    public static function getSoapCallResponseMessage(\SoapClient $client): string
+    public static function getSoapCallResponseMessage(\SoapClient $client): ?string
     {
         return $client->__getLastResponse();
     }
@@ -102,7 +102,7 @@ class Logger implements LoggerInterface
         );
 
         $this->writeMessage(
-            static::getSoapCallResponseMessage($client),
+            static::getSoapCallResponseMessage($client) ?? '',
             ['operation' => $operation, 'type' => self::TYPE_RESPONSE]
         );
     }

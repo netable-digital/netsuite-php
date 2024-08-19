@@ -94,6 +94,7 @@ class PermissionCode {
     const _budget = "_budget";
     const _buildAssemblies = "_buildAssemblies";
     const _buildWorkOrders = "_buildWorkOrders";
+    const _bulkProcessingSubmissions = "_bulkProcessingSubmissions";
     const _bulkTimeEntryModification = "_bulkTimeEntryModification";
     const _calculateTime = "_calculateTime";
     const _calendar = "_calendar";
@@ -146,6 +147,7 @@ class PermissionCode {
     const _createAllocationSchedules = "_createAllocationSchedules";
     const _createConsolidationCompany = "_createConsolidationCompany";
     const _createFiscalCalendar = "_createFiscalCalendar";
+    const _createHtmlFormulasInSearch = "_createHtmlFormulasInSearch";
     const _createInventoryCounts = "_createInventoryCounts";
     const _createProjectsFromSalesTransactions = "_createProjectsFromSalesTransactions";
     const _creditCard = "_creditCard";
@@ -251,6 +253,7 @@ class PermissionCode {
     const _enterVendorCredits = "_enterVendorCredits";
     const _enterYearToDatePayrollAdjustments = "_enterYearToDatePayrollAdjustments";
     const _entityAccountMapping = "_entityAccountMapping";
+    const _entitySubsidiaryRelationship = "_entitySubsidiaryRelationship";
     const _equityRegisters = "_equityRegisters";
     const _escalationAssignment = "_escalationAssignment";
     const _escalationAssignmentRule = "_escalationAssignmentRule";
@@ -298,6 +301,7 @@ class PermissionCode {
     const _generateSingleOrderRevenueContracts = "_generateSingleOrderRevenueContracts";
     const _generateStatements = "_generateStatements";
     const _genericResources = "_genericResources";
+    const _giftCertificate = "_giftCertificate";
     const _globalAccountMapping = "_globalAccountMapping";
     const _globalInventoryRelationship = "_globalInventoryRelationship";
     const _governmentIssuedIdTypes = "_governmentIssuedIdTypes";
@@ -404,7 +408,10 @@ class PermissionCode {
     const _notifications = "_notifications";
     const _nsawConnectorAdministrator = "_nsawConnectorAdministrator";
     const _oauth20authorizedApplicationsManagement = "_oauth20authorizedApplicationsManagement";
-    const _oaxConnectorAdministrator = "_oaxConnectorAdministrator";
+    const _oidcProviderSetup = "_oidcProviderSetup";
+    const _onboardingAdministration = "_onboardingAdministration";
+    const _onboardingPlan = "_onboardingPlan";
+    const _onboardingTask = "_onboardingTask";
     const _onlineCaseForm = "_onlineCaseForm";
     const _onlineCustomerForm = "_onlineCustomerForm";
     const _onlineCustomRecordForm = "_onlineCustomRecordForm";
@@ -415,6 +422,7 @@ class PermissionCode {
     const _orderManagementDashboard = "_orderManagementDashboard";
     const _orderPromising = "_orderPromising";
     const _orderReservation = "_orderReservation";
+    const _orderReservationToDelete = "_orderReservationToDelete";
     const _organizationalValue = "_organizationalValue";
     const _otherAssetRegisters = "_otherAssetRegisters";
     const _otherCurrentAssetRegisters = "_otherCurrentAssetRegisters";
@@ -520,6 +528,7 @@ class PermissionCode {
     const _reconcile = "_reconcile";
     const _reconcileReporting = "_reconcileReporting";
     const _recordCustomField = "_recordCustomField";
+    const _recordsCatalog = "_recordsCatalog";
     const _refundReturns = "_refundReturns";
     const _relatedItems = "_relatedItems";
     const _removePersonalInformationCreate = "_removePersonalInformationCreate";
@@ -569,6 +578,7 @@ class PermissionCode {
     const _salesTerritory = "_salesTerritory";
     const _salesTerritoryRule = "_salesTerritoryRule";
     const _samlSingleSignOn = "_samlSingleSignOn";
+    const _scannedVendorBills = "_scannedVendorBills";
     const _scheduleMassUpdates = "_scheduleMassUpdates";
     const _secretsManagement = "_secretsManagement";
     const _securityIssueObfuscationProcess = "_securityIssueObfuscationProcess";
